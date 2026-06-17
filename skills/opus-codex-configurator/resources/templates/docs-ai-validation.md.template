@@ -1,0 +1,54 @@
+# AI Validation Model
+
+This file defines how Codex must validate work and how Opus must review validation evidence.
+
+## Core rule
+
+No validation evidence = no acceptance.
+
+## Validation ladder
+
+{{VALIDATION_LADDER}}
+
+## Project-specific validation commands
+
+{{PROJECT_VALIDATION_COMMANDS}}
+
+## Validation by change type
+
+### Small bugfix
+
+- Run the most specific regression test.
+- Run relevant static checks if available.
+- Explain why broader validation was or was not needed.
+
+### Feature slice
+
+- Run targeted tests.
+- Run static checks/build.
+- Run related integration tests if behavior crosses boundaries.
+
+### Refactor
+
+- Prove behavior did not change.
+- Run existing tests for the affected area.
+- Run build/typecheck/lint where available.
+
+### High-risk change
+
+- Require explicit authorization.
+- Run full relevant validation.
+- Include rollback notes.
+- Consider human approval.
+
+## Baseline failure policy
+
+{{BASELINE_FAILURE_POLICY}}
+
+## Evidence contract
+
+{{EVIDENCE_CONTRACT}}
+
+## Manual validation
+
+When automated validation is unavailable, Codex must provide manual validation steps and state remaining risk.
