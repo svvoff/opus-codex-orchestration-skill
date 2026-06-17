@@ -1,41 +1,17 @@
-# Profile: DB Migrations Risk Area
+# Risk Profile: db-migrations
 
 ## Category
 
 risk-area
 
-## When to use
+## Rule
 
-Use when a project includes database migrations, schema changes, seed data, ORM schema files, or data backfills.
+Schema/data migrations require dry-run, rollback plan, and explicit approval when destructive or production-impacting.
 
-## Detection signals
+## Codex default restriction
 
-- migrations directories;
-- Prisma/Drizzle/TypeORM/Alembic/Rails migrations;
-- SQL schema files;
-- seed/backfill scripts.
+Do not modify this area unless the Codex Task Packet explicitly authorizes it.
 
-## Adds to project profile
+## Opus review focus
 
-- `risk_areas += ["db-migrations"]`
-- strict migration review.
-
-## Codex rules
-
-Codex must not create or modify database migrations unless explicitly authorized.
-
-For migration tasks, Codex must include rollback notes and validation commands.
-
-## Opus rules
-
-Opus must require:
-
-- forward migration plan;
-- rollback plan;
-- data safety notes;
-- compatibility considerations;
-- CI/staging validation expectations.
-
-## Validation requirements
-
-Prefer migration dry-runs, schema checks, and integration tests in test databases. Do not run production migrations.
+Check scope, validation evidence, rollback path, and whether human approval is required.

@@ -1,31 +1,29 @@
-# Profile Composition Precedence
+# Profile Composition and Precedence
 
-When combining profile modules, resolve conflicts using these rules.
+## Rule order
 
-## Precedence order
+1. User/project-specific instructions
+2. Risk-area profiles
+3. Integration profiles
+4. Framework profiles
+5. Language profiles
+6. Platform profiles
+7. Generic defaults
 
-```text
-Project-specific user instructions
-  > explicit repository facts
-  > risk-area profiles
-  > integration profiles
-  > framework profiles
-  > language profiles
-  > platform profiles
-  > repo-shape profiles
-  > generic defaults
-```
+## Conflict handling
 
-## Conflict rules
+- More specific beats more general.
+- More restrictive beats more permissive.
+- Safety beats convenience.
+- Project-specific facts beat reusable assumptions.
+- Repository evidence beats guessed stack labels.
 
-- More specific rules override more general rules.
-- Stricter safety rules override more permissive rules.
-- Validation requirements are additive unless they conflict.
-- If two validation rules conflict, keep both as options and ask one question.
-- Security and data-safety rules override convenience rules.
-- Project-specific commands override generic profile commands.
-- Do not silently drop a rule; record the decision.
+## Output transparency
 
-## Example
+The configuration draft must list:
 
-If `platforms/ios.md` allows Swift file edits but `risk-areas/payments.md` forbids purchase entitlement changes without approval, the payment restriction wins.
+- profiles used;
+- profiles drafted lazily;
+- rules overridden;
+- assumptions;
+- unresolved conflicts.

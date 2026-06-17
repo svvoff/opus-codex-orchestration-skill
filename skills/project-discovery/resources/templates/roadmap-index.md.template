@@ -1,0 +1,23 @@
+# Roadmap Index
+
+## Current stage
+
+## Current stage file
+
+## Stage overview
+
+| Stage | Name | Status | File |
+|---|---|---|---|
+| 0 | Discovery | done/active | stages/00-discovery.md |
+| 1 | MVP | active | stages/01-mvp.md |
+| 2 | Validation / soft launch | future | stages/02-validation.md |
+| 3 | Public launch | future | stages/03-public-launch.md |
+| 4 | Retention | future | stages/04-retention.md |
+| 5 | Monetization | future | stages/05-monetization.md |
+| 6 | Scale / live ops | future | stages/06-scale.md |
+
+## Future-aware constraints
+
+## Do not read by default
+
+Do not read future stage files during normal task execution unless the selected task explicitly references them.

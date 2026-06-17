@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="${ROOT%/}.zip"
-cd "$(dirname "$ROOT")"
-zip -r "$OUT" "$(basename "$ROOT")" -x "*/.git/*" >/dev/null
-echo "$OUT"
+cd "$(dirname "$0")/.."
+rm -f ../opus-codex-orchestration-skill.zip
+zip -r ../opus-codex-orchestration-skill.zip . -x "*.DS_Store" "*.tmp"

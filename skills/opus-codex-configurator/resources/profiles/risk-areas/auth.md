@@ -1,64 +1,17 @@
-# Profile: Auth Risk Area
+# Risk Profile: auth
 
 ## Category
 
 risk-area
 
-## When to use
+## Rule
 
-Use when the repository includes authentication, authorization, sessions, identity providers, permissions, roles, or access control.
+Authentication, authorization, permissions, session, and identity logic are high-risk. Require explicit task scope and validation for allowed and denied cases.
 
-## Detection signals
+## Codex default restriction
 
-- files/directories named auth, session, permission, role, policy, middleware, guard;
-- OAuth/OIDC/Firebase Auth/Supabase Auth/Clerk/Auth0 dependencies;
-- login/logout/signup flows;
-- JWT/session/cookie handling.
+Do not modify this area unless the Codex Task Packet explicitly authorizes it.
 
-## Adds to project profile
+## Opus review focus
 
-- `risk_areas += ["auth", "authorization"]`
-- high review strictness;
-- explicit approval needed for access-control changes.
-
-## Common risk areas
-
-- privilege escalation;
-- accidental public access;
-- session leaks;
-- token handling;
-- weakening authorization checks;
-- insecure logging of sensitive data.
-
-## Codex rules
-
-Codex must not modify authentication or authorization behavior unless the task packet explicitly authorizes it.
-
-For auth-related tasks, Codex must:
-
-- identify affected permission boundaries;
-- add/update tests for allowed and denied cases;
-- preserve existing security invariants;
-- report any behavior change clearly.
-
-## Opus rules
-
-Opus must define:
-
-- who is allowed;
-- who is denied;
-- expected status/error behavior;
-- relevant tests;
-- human approval need.
-
-## Validation requirements
-
-Require tests for positive and negative authorization paths when behavior changes.
-
-## Task packet defaults
-
-Include roles, permissions, session state, expected failures, and non-goals.
-
-## Report requirements
-
-Codex must report whether auth behavior changed and which tests prove it.
+Check scope, validation evidence, rollback path, and whether human approval is required.

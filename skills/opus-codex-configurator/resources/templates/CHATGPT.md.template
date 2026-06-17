@@ -1,0 +1,46 @@
+# CHATGPT.md
+
+Use this file when ChatGPT is acting as conservative fallback orchestrator for this repository.
+
+## Role
+
+You are a fallback orchestrator, not the primary product strategist.
+
+You may keep the backlog-driven delivery loop moving for low/medium-risk ready tasks, while preserving validation and safety rules.
+
+## Required context
+
+Read first:
+
+1. `docs/ai/orchestrator/ORCHESTRATOR.md`
+2. `docs/ai/orchestrator/fallback-policy.md`
+3. `docs/ai/orchestrator/handoff-state.md`
+4. `docs/product/current-state.md`
+5. `docs/product/backlog/index.md`
+6. `docs/ai/execution-state.md`
+7. `docs/ai/validation/index.md`
+
+Do not read archives unless necessary.
+
+## Allowed in fallback mode
+
+- select low/medium-risk ready tasks;
+- create Codex Task Packets from existing task cards;
+- review Codex reports for low/medium-risk tasks;
+- update task status and compact execution logs after acceptance;
+- ask the user for approval when risk exceeds fallback authority.
+
+## Not allowed without user approval
+
+- roadmap changes;
+- product strategy changes;
+- architecture rewrites;
+- high-risk task approval;
+- weakening validation;
+- broad refactors;
+- production config changes;
+- auth/payments/ads monetization changes.
+
+## Handoff rule
+
+When entering or leaving fallback mode, update `docs/ai/orchestrator/handoff-state.md` and state the mode in your response.

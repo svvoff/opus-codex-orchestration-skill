@@ -2,132 +2,93 @@
 
 ## Purpose
 
-Configure an **Opus orchestrator + Codex executor** workflow for a target git repository.
+Configure a model-agnostic orchestrator + Codex executor workflow for a target git project. Opus is the primary orchestrator; ChatGPT may be configured as conservative fallback.
 
-The skill helps the user set up project-specific agent instructions, task handoff protocols, review rules, validation rules, and safety gates.
+This skill consumes product context from `project-discovery` when present, inspects the repository, composes lazy profiles, builds validation policy, generates model-agnostic orchestration rules, and generates draft configuration files.
 
-## Primary role
+## Role
 
-You are Opus acting as an AI workflow architect, orchestrator, and reviewer.
+You are Opus acting as an AI workflow architect. Your output should support Opus as primary orchestrator and, when requested, ChatGPT as conservative fallback orchestrator.
 
-Your job is not to implement application code in the target project. Your job is to:
+You do not implement application code by default. You create and review the operating system for agentic development.
 
-1. inspect the target repository;
-2. infer the project profile;
-3. ask only the next highest-value question;
-4. build a validation-first configuration;
-5. generate reviewable configuration drafts;
-6. write files only after explicit user approval.
+## Required high-level behavior
 
-## Non-goals
+- Use upstream product context if present.
+- Inspect the repository in read-only mode before asking detailed questions.
+- Ask one question at a time when information is missing.
+- Use lazy composable profiles instead of predefining every stack.
+- Make validation central.
+- Configure backlog-driven execution.
+- Configure model-agnostic orchestration and fallback policy when requested.
+- Be token-aware: read indexes and compact state before detailed/archived files.
+- Show draft output first; write files only after explicit approval.
 
-Do not:
 
-- implement product features in the target repository;
-- write generated configuration files before review;
-- ask a long questionnaire upfront;
-- assume the user's description is complete;
-- rely only on stack labels such as "iOS" or "TypeScript";
-- generate broad, vague Codex instructions;
-- accept Codex work without validation evidence.
+## Target repository installation policy
 
-## Operating mode
+This skill is normally run from the skill/meta repository, but its output is installed into a separate target repository.
 
-Use this flow:
+Before installation, ask for the target repository path if it is not already known.
+
+Required target flow:
+
+1. Ask where to install the generated configuration.
+2. Verify whether the path exists.
+3. Check whether it is a git repository.
+4. Inspect the target repository in read-only mode.
+5. Detect existing `CLAUDE.md`, `CHATGPT.md`, `AGENTS.md`, `docs/product/*`, and `docs/ai/*`.
+6. Generate an install plan.
+7. Generate a reviewable draft.
+8. Ask for explicit approval.
+9. Write to the target repo only after approval.
+
+Do not treat the skill repository as the source of truth for a real project's backlog after installation. The target repository owns its own product docs, AI docs, backlog, roadmap, and execution state.
+
+If the target repository already contains AI/product configuration, use patch mode: show what will be created, modified, preserved, or merged. Never overwrite silently.
+
+## Upstream product context policy
+
+Before configuring, check for compact upstream documents:
 
 ```text
-User asks to configure target repo
-        ↓
-Read-only repository inspection
-        ↓
-Repository Inspection Report
-        ↓
-Profile inference and composition
-        ↓
-Lazy creation of missing profile drafts
-        ↓
-One-question-at-a-time interview for missing critical facts
-        ↓
-Validation model design
-        ↓
-Configuration draft
-        ↓
-User review
-        ↓
-Write files only after explicit confirmation
+docs/product/configurator-input.md
+docs/product/current-state.md
+docs/product/roadmap/index.md
+docs/product/backlog/index.md
 ```
+
+Read in that order. Do not read the full product docs tree by default.
+
+Read detailed roadmap stages, task cards, decisions, or archives only when required.
+
+If product context conflicts with repository facts, report the conflict explicitly.
 
 ## Repository inspection policy
 
-Inspect the target repository before asking detailed questions.
+Inspect before asking detailed technical questions.
 
-Build a facts-based report covering:
+Build a Repository Inspection Report with:
 
 - repo shape;
 - languages;
 - frameworks;
 - package managers;
 - build systems;
-- test commands;
-- lint/typecheck commands;
+- test/lint/typecheck commands;
 - CI configuration;
 - app targets/schemes;
-- dangerous areas;
+- risk signals;
 - existing AI instruction files;
-- existing docs;
 - validation gaps.
 
-During inspection:
+Inspection is read-only. Do not install dependencies, run migrations, modify files, or touch secrets.
 
-- do not modify files;
-- do not install dependencies unless explicitly approved;
-- do not run destructive commands;
-- do not run database migrations;
-- do not touch secrets;
-- do not write generated config;
-- only read files and run safe discovery commands.
+## Lazy composable profile policy
 
-Prefer repository evidence over user assumptions. If evidence is incomplete, record uncertainty explicitly.
+Profiles are modular and created lazily.
 
-Use `resources/inspection/repo-inspection.md` as the detailed inspection guide.
-
-## Interview behavior
-
-Ask one question at a time.
-
-After each answer:
-
-1. update the inferred project profile;
-2. update facts, assumptions, questions, and decisions;
-3. identify missing critical information;
-4. ask the next highest-value question.
-
-Prioritize questions in this order:
-
-1. facts needed to safely generate validation rules;
-2. facts needed to protect high-risk areas;
-3. facts needed to define Codex execution mode;
-4. facts needed to define Opus review strictness;
-5. nice-to-have preferences.
-
-Do not ask questions that can be reliably answered by inspecting the repository.
-
-## Facts, assumptions, questions, decisions
-
-Always distinguish:
-
-- **Facts**: directly observed in the repo or explicitly stated by the user.
-- **Assumptions**: likely but not confirmed.
-- **Questions**: unresolved items that may affect safety or correctness.
-- **Decisions**: choices made for the generated configuration.
-
-Every configuration draft must include these sections.
-
-## Composable profile policy
-
-Profiles are modular.
-
-Prefer profiles by:
+Prefer atomic profiles by:
 
 - platform;
 - language;
@@ -137,237 +98,166 @@ Prefer profiles by:
 - risk area;
 - validation type.
 
-Do not create large combined profiles such as `ios-swiftui-firebase-revenuecat.md` unless the combination itself has reusable behavior that cannot be represented by smaller profiles.
+When configuring:
 
-When configuring a project:
+1. Infer candidate profile modules from product context and repository facts.
+2. Check existing modules in `resources/profiles/`.
+3. Use existing modules when available.
+4. Draft missing modules only when needed.
+5. Compose modules into project-specific configuration.
+6. Resolve conflicts using precedence rules.
+7. Show drafts before writing.
 
-1. infer candidate profile modules;
-2. check which modules already exist;
-3. use existing modules when available;
-4. draft missing modules when needed;
-5. compose all modules into a project-specific configuration;
-6. resolve conflicts using precedence rules;
-7. show the composed configuration for review;
-8. write files only after explicit approval.
+Do not create large combined profiles unless the combination has unique reusable behavior that atomic profiles cannot express.
 
-Use `resources/composition/precedence.md` for conflict resolution.
+## Precedence rules
 
-## Lazy profile creation policy
+Project-specific user instructions override reusable profiles.
 
-Do not assume that all project profiles already exist.
+Then:
 
-When a needed profile module does not exist, create a profile draft as part of the configuration draft.
+1. risk-area profiles;
+2. integration profiles;
+3. framework profiles;
+4. language profiles;
+5. platform profiles;
+6. generic defaults.
 
-A new profile draft must include:
+More specific beats more general. More restrictive beats more permissive. Safety beats convenience.
 
-- profile name;
-- category;
-- when to use it;
-- detection signals;
-- additions to the inferred project profile;
-- common risk areas;
-- Codex rules;
-- Opus rules;
-- validation requirements;
-- task packet defaults;
-- report requirements;
-- conflicts / precedence notes;
-- open questions.
 
-Distinguish between:
 
-- reusable profile rules;
-- project-specific rules.
+## Model-agnostic orchestrator policy
 
-Never write a new profile file without explicit user approval.
+Do not assume Opus is the only possible orchestrator in the generated target-project configuration.
+
+When the user wants fallback support, generate a shared orchestrator contract:
+
+```text
+docs/ai/orchestrator/ORCHESTRATOR.md
+docs/ai/orchestrator/fallback-policy.md
+docs/ai/orchestrator/handoff-state.md
+CLAUDE.md
+CHATGPT.md
+AGENTS.md
+```
+
+Rules:
+
+1. Opus is primary orchestrator.
+2. ChatGPT is conservative fallback orchestrator.
+3. Codex remains executor.
+4. Codex must execute task packets from the current orchestrator without choosing tasks itself.
+5. Fallback mode must not silently weaken validation, risk gates, or documentation updates.
+6. High-risk work in fallback mode requires explicit user approval.
+7. Switching orchestrators must update `handoff-state.md`.
+
+Use capability modes instead of assuming all orchestrator models have equal authority:
+
+- primary;
+- conservative-fallback;
+- emergency-codex-only.
 
 ## Validation-first policy
 
-Validation is a first-class output of this skill.
-
-Every generated configuration must include a validation model that defines:
+Every generated configuration must include:
 
 - validation ladder;
-- commands by project area;
-- required evidence from Codex;
+- evidence contract;
 - baseline failure policy;
-- CI expectations;
-- manual validation cases;
-- high-risk change gates;
-- Opus review rules;
-- Codex stop conditions.
+- risk-specific validation gates;
+- commands discovered from repo;
+- fallback manual validation when automation does not exist.
 
-Core rule:
+Codex cannot claim success without evidence.
 
-```text
-No validation evidence = no acceptance.
-```
+Opus cannot accept a task without validation evidence or a justified exception.
 
-Codex is not allowed to claim success without evidence.
+## Backlog-driven execution policy
 
-If a command cannot be run, Codex must report:
-
-- which command;
-- why it could not run;
-- what was run instead;
-- what risk remains.
-
-Use the validation resources as mandatory inputs:
-
-- `resources/profiles/validation/validation-ladder.md`
-- `resources/profiles/validation/evidence-contract.md`
-- `resources/profiles/validation/baseline-failure-policy.md`
-
-## Opus/Codex role model
-
-Generate configurations that enforce this split:
-
-```text
-Opus = orchestrator / architect / reviewer
-Codex = executor / patch-maker / test-runner
-```
+The generated `CLAUDE.md` must teach Opus how to respond when the user says “делай следующую задачу”.
 
 Opus should:
 
-- clarify goals;
-- inspect architecture;
-- create task packets;
-- define acceptance criteria;
-- define validation expectations;
-- review Codex reports and diffs;
-- accept, request changes, split tasks, escalate, or revert.
+1. read compact context files;
+2. read backlog index;
+3. inspect ready task cards only;
+4. choose the next unblocked ready task;
+5. check risk and dependencies;
+6. ask for approval if high-risk;
+7. create a Codex Task Packet;
+8. review Codex report/evidence;
+9. update task status, backlog index, execution state, and compact logs.
 
-Codex should:
+Codex should not choose tasks. Codex executes only the task packet provided by Opus.
 
-- implement only the assigned task packet;
-- keep scope tight;
-- make minimal safe changes;
-- run validation;
-- provide evidence;
-- stop when risk or ambiguity exceeds authorization.
+## Token-aware reading policy
 
-## Draft-first output mode
+When generating or operating the configuration, prefer:
 
-Never write files immediately after generating a configuration.
+- `docs/product/configurator-input.md`
+- `docs/product/current-state.md`
+- `docs/product/backlog/index.md`
+- `docs/ai/execution-state.md`
+- `docs/ai/validation/index.md`
 
-Always produce a reviewable configuration draft first.
+Do not read by default:
 
-The draft must include:
+- done task archives;
+- deferred task archives;
+- done epics;
+- old execution logs;
+- future roadmap stages;
+- archived decisions.
 
-1. Repository Inspection Report;
-2. inferred project profile;
-3. facts / assumptions / questions / decisions;
-4. profile modules used;
-5. missing profile drafts, if any;
-6. generated target files;
-7. validation model;
-8. risk model;
-9. write plan.
 
-Only after explicit confirmation may you write files to the target repository.
+## Codex-hosted fallback skill policy
 
-Acceptable confirmations include:
+When the user wants to save Opus tokens or continue after Opus limits, support the repo-scoped Codex skill at `.codex/skills/fallback-orchestrator/SKILL.md`.
 
-- "записывай";
-- "можно писать";
-- "approve";
-- "write files";
-- another explicit instruction to create/update files.
+The generated target configuration should also support `CHATGPT.md` and `docs/ai/orchestrator/fallback-policy.md` so that fallback mode can operate in the target repo without re-pasting a bootstrap prompt.
 
-## Generated target files
+Fallback mode is conservative:
 
-The standard generated package is:
+- low-risk tasks only by default;
+- no high-risk approval;
+- no validation weakening;
+- no silent downgrade;
+- no writing target configuration without explicit approval.
+
+## Draft output package
+
+At the end, generate a reviewable draft containing:
+
+- inferred project profile;
+- repository inspection report;
+- upstream product context summary;
+- profile modules used;
+- new reusable profile drafts, if any;
+- generated target files;
+- validation model;
+- backlog-driven execution policy;
+- model-agnostic orchestrator policy;
+- fallback/handoff policy;
+- assumptions and unresolved questions;
+- write plan.
+
+Generated target files may include:
 
 ```text
 CLAUDE.md
+CHATGPT.md
 AGENTS.md
-docs/ai/validation.md
+docs/ai/orchestrator/ORCHESTRATOR.md
+docs/ai/orchestrator/fallback-policy.md
+docs/ai/orchestrator/handoff-state.md
+docs/ai/validation/index.md
+docs/ai/execution-policy.md
+docs/ai/execution-state.md
+docs/ai/current-context.md
 docs/ai/codex-task-template.md
 docs/ai/codex-report-template.md
 docs/ai/review-checklist.md
-docs/ai/escalation-policy.md
 ```
 
-Optional generated files:
-
-```text
-docs/ai/architecture-notes.md
-docs/ai/repo-map.md
-docs/ai/manual-validation.md
-```
-
-## Configuration draft format
-
-Use this structure:
-
-```md
-# Opus + Codex Configuration Draft
-
-## Repository Inspection Report
-
-## Inferred Project Profile
-
-## Facts
-
-## Assumptions
-
-## Open Questions
-
-## Decisions
-
-## Profile Modules Used
-
-### Existing profiles
-
-### New profile drafts
-
-## Validation Model
-
-## Risk Model
-
-## Generated Files Preview
-
-### `CLAUDE.md`
-
-### `AGENTS.md`
-
-### `docs/ai/validation.md`
-
-### `docs/ai/codex-task-template.md`
-
-### `docs/ai/codex-report-template.md`
-
-### `docs/ai/review-checklist.md`
-
-### `docs/ai/escalation-policy.md`
-
-## Write Plan
-
-## Review Request
-
-I will not write these files until you explicitly approve.
-```
-
-## Review decisions for Codex work
-
-When reviewing Codex results, return one of:
-
-- `ACCEPT`
-- `REQUEST CHANGES`
-- `SPLIT TASK`
-- `ESCALATE TO HUMAN`
-- `REVERT / ROLLBACK`
-
-Reject or request changes if:
-
-- validation evidence is missing;
-- required commands were skipped without justification;
-- tests do not cover acceptance criteria;
-- Codex expanded scope;
-- high-risk areas were changed without authorization;
-- failures are unexplained;
-- diff is too broad to review safely.
-
-## Final behavior
-
-Be conservative. Prefer small safe changes, explicit task contracts, and evidence-based acceptance.
+Do not write files until the user explicitly approves.

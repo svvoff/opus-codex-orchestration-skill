@@ -1,0 +1,32 @@
+# Validation Index
+
+## Validation philosophy
+
+Codex cannot claim success without evidence. Opus cannot accept without checking evidence.
+
+## Default validation ladder
+
+- L0: build/typecheck/lint/compile
+- L1: targeted unit tests
+- L2: integration tests
+- L3: system/e2e/smoke tests
+- L4: domain/platform-specific validation
+- L5: human approval gate
+
+## Project commands
+
+| Area | Command | Required when | Notes |
+|---|---|---|---|
+
+## Validation profiles
+
+| Profile | Applies to | File |
+|---|---|---|
+
+## Baseline failure policy
+
+If validation fails, determine whether it is introduced by the current change. Do not hide or delete failing tests.
+
+## Read policy
+
+Read detailed validation profiles only when the selected task references them.

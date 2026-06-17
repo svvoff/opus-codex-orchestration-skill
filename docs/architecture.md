@@ -1,19 +1,86 @@
 # Architecture
 
-This skill has four main layers.
+This repository defines a two-skill system for product discovery and AI-agent delivery.
 
-## 1. Inspection layer
+```text
+Project idea / product discussion
+  -> project-discovery skill
+  -> token-aware product docs + roadmap + backlog
+  -> configurator-input.md
+  -> opus-codex-configurator skill
+  -> ORCHESTRATOR.md / CLAUDE.md / CHATGPT.md / AGENTS.md / validation / execution policy
+  -> backlog-driven delivery loop
+```
 
-Builds an evidence-based picture of the target repository. This includes repo shape, stack, package managers, CI, test commands, risky areas, and existing AI instruction files.
+## Skill 1: project-discovery
 
-## 2. Profile composition layer
+The first skill turns an ambiguous project idea into structured product context:
 
-Maps facts from the repository and user answers to reusable composable profiles. Missing profiles are created lazily as drafts.
+- project brief;
+- current state;
+- staged roadmap;
+- epics;
+- task cards;
+- decisions;
+- assumptions;
+- compact configurator input.
 
-## 3. Validation architecture layer
+It asks questions one at a time and avoids writing files until the user confirms the draft.
 
-Defines how Codex must prove that an implementation works. Validation evidence is mandatory for acceptance.
+## Skill 2: opus-codex-configurator
 
-## 4. Generation layer
+The second skill configures the engineering-agent workflow:
 
-Generates project-specific configuration files for Opus and Codex. Draft-first, write-after-confirmation.
+- reads compact upstream product context;
+- inspects the target repository in read-only mode;
+- composes existing and lazy-created profiles;
+- builds validation and risk policy;
+- generates Opus and Codex instructions;
+- configures backlog-driven execution.
+
+## Shared contracts
+
+Both skills use the same shared contracts for:
+
+- project context;
+- roadmap stages;
+- backlog indexes;
+- epic cards;
+- task cards;
+- execution state;
+- delivery loop;
+- validation evidence;
+- context budget.
+
+Changing a shared contract changes the expectations for both skills.
+
+## Token-aware design
+
+The target repository should not store all product/backlog/execution history in a single huge markdown file. Instead:
+
+- indexes route to the relevant small files;
+- active files are read first;
+- done/deferred/archive files are read only on demand;
+- completed work is summarized in compact ledgers;
+- task cards are self-contained enough for execution.
+
+
+## Model-agnostic orchestration
+
+The generated target-project configuration can support more than one orchestrator:
+
+```text
+Primary: Opus orchestrator -> Codex executor
+Fallback: ChatGPT orchestrator -> Codex executor
+Emergency: Codex-only for trivial scoped tasks
+```
+
+The key design choice is to move orchestration behavior into a shared contract:
+
+```text
+docs/ai/orchestrator/ORCHESTRATOR.md
+```
+
+`CLAUDE.md` becomes the primary-orchestrator wrapper for Opus. `CHATGPT.md` becomes the conservative fallback wrapper. `AGENTS.md` remains the executor contract for Codex.
+
+Fallback mode is intentionally conservative. It can continue low/medium-risk ready tasks, but it should not silently approve high-risk work, roadmap changes, architecture changes, or weaker validation.

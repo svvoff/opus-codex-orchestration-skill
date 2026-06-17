@@ -1,0 +1,51 @@
+---
+id: TASK-000
+title: Example task
+status: ready
+epic: EPIC-000
+priority: P0
+risk: low
+depends_on: []
+validation_profile: []
+context_refs: []
+---
+
+# TASK-000 — Example Task
+
+## Goal
+
+## Context
+
+## Scope
+
+Codex may modify:
+
+- 
+
+## Non-goals
+
+Codex must not modify:
+
+- 
+
+## Acceptance criteria
+
+- [ ] 
+
+## Validation requirements
+
+Required evidence:
+
+- [ ] 
+
+## Codex allowed areas
+
+## Codex forbidden areas
+
+## Opus review focus
+
+## Documentation updates required
+
+- [ ] update backlog index
+- [ ] update execution state
+- [ ] update execution log

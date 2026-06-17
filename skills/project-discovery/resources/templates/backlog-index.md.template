@@ -1,0 +1,27 @@
+# Backlog Index
+
+## Active milestone
+
+## Next task selection policy
+
+Choose the highest-priority ready task whose dependencies are done and whose risk does not require human approval.
+
+## Ready tasks
+
+| ID | Title | Epic | Priority | Risk | Depends on | File |
+|---|---|---|---|---|---|---|
+
+## Blocked tasks
+
+| ID | Title | Blocker | File |
+|---|---|---|---|
+
+## Recently completed
+
+## Do not read by default
+
+- `tasks/done/`
+- `tasks/deferred/`
+- `epics/done/`
+- `../roadmap/stages/*` except current stage
+- `../../ai/execution-log/archive/`

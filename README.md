@@ -1,69 +1,218 @@
-# Opus-Codex Orchestration Skill
+# Opus/Codex Orchestration Skill System
 
-A Claude/Opus skill for configuring an **Opus orchestrator + Codex executor** workflow for a target git repository.
+This is a **meta-repository** for configuring AI-assisted delivery workflows in real target git repositories.
 
-The skill is designed to be used from inside Claude Code / Opus. It inspects the target repository in read-only mode, asks one question at a time, builds a validation-first project profile, and generates a reviewable configuration draft before writing anything.
+It is not the app/game/backend being built. It is the reusable skill system used to discuss a project, generate product context, configure agents, and install the resulting workflow into a separate target repository.
 
-## Core idea
+## Core runtime model
 
 ```text
-Opus = orchestrator / architect / reviewer
-Codex = executor / patch-maker / test-runner
+Primary:   Opus orchestrator   -> Codex executor
+Fallback:  ChatGPT orchestrator -> Codex executor
+Emergency: Codex-only for trivial scoped tasks
 ```
 
-This repository contains the reusable skill that helps create project-specific files such as:
+## What this project does
+
+The system has three skill layers:
+
+```text
+1. project-discovery
+   Discusses the real project, product goals, MVP, roadmap, epics, backlog, risks, and validation goals.
+
+2. opus-codex-configurator
+   Inspects the target repository and generates project-specific Opus/ChatGPT/Codex configuration.
+
+3. fallback-orchestrator
+   A Codex skill that lets Codex CLI host a conservative ChatGPT fallback orchestrator when Opus is unavailable or when the task is simple.
+```
+
+The intended result is a configured target repository where the user can say:
+
+```text
+делай следующую задачу
+```
+
+and the orchestrator will choose the next ready task, delegate to Codex, validate the result, update docs/status, and report back.
+
+## Canonical workflow
+
+### Phase 1 — Work in this skill/meta repository
+
+```bash
+cd opus-codex-orchestration-skill
+```
+
+Use Opus primary mode, or Codex fallback mode if Opus is unavailable:
+
+```text
+Обсудим новый проект: игра на Яндекс Игры.
+```
+
+The `project-discovery` skill creates draft product artifacts:
+
+- project brief;
+- current state;
+- roadmap;
+- backlog;
+- epics;
+- task cards;
+- decisions;
+- assumptions;
+- configurator input.
+
+### Phase 2 — Choose target repository
+
+The configurator must ask where to install the generated workflow:
+
+```text
+Куда установить конфигурацию связки? Укажи путь к целевому git-репозиторию.
+```
+
+Example:
+
+```text
+../my-yandex-game
+```
+
+### Phase 3 — Configure target repository
+
+The configurator:
+
+1. inspects the target repo in read-only mode;
+2. reads upstream product context;
+3. infers required profiles;
+4. creates missing profiles lazily as drafts;
+5. generates an install plan;
+6. generates a reviewable configuration draft;
+7. writes files only after explicit approval.
+
+Typical target repo output:
 
 ```text
 CLAUDE.md
+CHATGPT.md
 AGENTS.md
-docs/ai/validation.md
-docs/ai/codex-task-template.md
-docs/ai/codex-report-template.md
-docs/ai/review-checklist.md
-docs/ai/escalation-policy.md
+
+docs/product/
+  project-brief.md
+  configurator-input.md
+  current-state.md
+  assumptions.md
+  roadmap/
+  backlog/
+  decisions/
+
+docs/ai/
+  execution-state.md
+  current-context.md
+  orchestrator/
+  validation/
+  execution-log/
 ```
+
+### Phase 4 — Work in the target repository
+
+```bash
+cd ../my-yandex-game
+```
+
+Then use:
+
+```text
+делай следующую задачу
+```
+
+The configured orchestrator reads compact index/current-state files, picks the next ready task, creates a Codex Task Packet, reviews Codex output, requires validation evidence, and updates status docs.
+
+## Fallback usage
+
+When Opus tokens are exhausted, or when the work is intentionally simple, use the repo-scoped Codex skill:
+
+```text
+$fallback-orchestrator обсудим новый проект
+$fallback-orchestrator настрой связку для ../target-repo
+$fallback-orchestrator делай следующую простую задачу
+```
+
+Fallback mode is conservative. It should not silently replace Opus for high-risk strategy, architecture, security, production, payments, ads monetization, migrations, secrets, or data deletion work.
 
 ## Design principles
 
-- Inspect the repository before asking detailed questions.
+- Skill repo and target repo are separate.
+- Inspect repositories before asking detailed technical questions.
 - Keep inspection read-only.
 - Ask one question at a time.
-- Generate configuration drafts before writing files.
-- Use composable profiles instead of large stack-specific templates.
-- Create missing profiles lazily when a new stack appears.
+- Draft before writing.
+- Write only after explicit approval.
+- Use composable profiles instead of huge stack-specific templates.
+- Create missing profiles lazily.
 - Treat validation evidence as mandatory.
-- Distinguish repository facts, assumptions, questions, and decisions.
+- Use token-aware reading: index first, archive by default.
+- Keep Opus for strategic/high-risk work.
+- Use ChatGPT fallback for conservative continuation.
+- Keep Codex as executor unless explicitly in fallback mode.
 
 ## Repository layout
 
 ```text
-skills/opus-codex-configurator/
-  SKILL.md
-  resources/
-    inspection/
-    composition/
-    profiles/
-      core/
-      risk-areas/
-      validation/
-    templates/
+.codex/
+  skills/
+    fallback-orchestrator/
+      SKILL.md
+
+skills/
+  project-discovery/
+    SKILL.md
+    resources/templates/
+
+  opus-codex-configurator/
+    SKILL.md
+    resources/
+      inspection/
+      composition/
+      profiles/
+      templates/
+
+  codex-fallback-orchestrator/
+    SKILL.md
+
+shared/
+  contracts/
+  principles/
+  vocabulary/
+
 docs/
+  PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md
+  target-repo-workflow.md
+  codex-fallback-workflow.md
+  token-aware-design.md
+  model-agnostic-orchestration.md
+  architecture.md
+  usage.md
+
 examples/
-scripts/
+  yandex-games-mvp/
 ```
 
-## Usage
+## For Opus review
 
-1. Add this skill repository to the environment where you use Claude/Opus.
-2. Open the target git project in Claude Code.
-3. Invoke the skill with a request such as:
+The most important file for a high-level Opus validation pass is:
 
 ```text
-Use the opus-codex-configurator skill to configure this repository for Opus orchestrator + Codex executor.
+docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md
 ```
 
-4. Let Opus inspect the repo.
-5. Review the generated draft.
-6. Approve writing files only after the draft looks correct.
+Suggested request:
 
-See [`docs/usage.md`](docs/usage.md) for a fuller walkthrough.
+```text
+Ты — Opus primary orchestrator. Провалидируй этот meta-project как систему для настройки Opus/ChatGPT orchestrator + Codex executor под реальные git-проекты. Начни с docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md и предложи patch plan.
+```
+
+## Key docs
+
+- [`docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md`](docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md)
+- [`docs/target-repo-workflow.md`](docs/target-repo-workflow.md)
+- [`docs/codex-fallback-workflow.md`](docs/codex-fallback-workflow.md)
+- [`docs/token-aware-design.md`](docs/token-aware-design.md)
+- [`docs/model-agnostic-orchestration.md`](docs/model-agnostic-orchestration.md)

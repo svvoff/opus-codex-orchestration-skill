@@ -1,0 +1,62 @@
+# Execution Policy
+
+## Trigger
+
+When the user says “делай следующую задачу”, run the backlog-driven execution loop.
+
+## Context budget
+
+Read small indexes first. Avoid archives by default.
+
+## Task selection
+
+Select a task that is:
+
+- `ready`;
+- in the active milestone;
+- not blocked;
+- dependencies done;
+- highest priority;
+- risk acceptable without extra approval.
+
+## High-risk approval
+
+Ask the user before delegating high-risk tasks.
+
+## Status transitions
+
+```text
+ready -> in_progress -> review -> done
+review -> ready   if changes requested
+any -> blocked    if a decision/dependency is missing
+```
+
+## Done criteria
+
+A task is done only after:
+
+- acceptance criteria met;
+- validation evidence exists;
+- Opus decision is ACCEPT;
+- task file moved to done;
+- index/state/log updated.
+
+
+## Orchestrator modes
+
+Primary mode:
+
+- Opus may execute normal backlog-driven flow and make architecture/review decisions within policy.
+
+Conservative fallback mode:
+
+- ChatGPT may continue low/medium-risk ready tasks.
+- ChatGPT must not approve high-risk work without explicit user approval.
+- ChatGPT must not change roadmap, strategy, architecture, or validation policy without user approval.
+
+Emergency Codex-only mode:
+
+- allowed only for trivial scoped tasks.
+- not allowed for high-risk or strategic work.
+
+Switching modes requires updating `docs/ai/orchestrator/handoff-state.md`.

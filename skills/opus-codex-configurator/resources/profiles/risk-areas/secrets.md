@@ -1,46 +1,17 @@
-# Profile: Secrets Risk Area
+# Risk Profile: secrets
 
 ## Category
 
 risk-area
 
-## When to use
+## Rule
 
-Use when a project includes secrets, environment files, tokens, certificates, API keys, signing keys, or credentials.
+Secrets, tokens, keys, credentials, certs, and private config must not be printed, committed, moved, or edited without explicit human instruction.
 
-## Detection signals
+## Codex default restriction
 
-- `.env*` files;
-- secrets-related CI config;
-- key/cert/pem/p12/mobileprovision files;
-- environment variable schemas;
-- cloud credentials.
+Do not modify this area unless the Codex Task Packet explicitly authorizes it.
 
-## Adds to project profile
+## Opus review focus
 
-- `risk_areas += ["secrets"]`
-- strict no-secret-exposure policy.
-
-## Common risk areas
-
-- accidental secret logging;
-- committing credentials;
-- modifying production credentials;
-- weakening env validation;
-- exposing private config in generated docs.
-
-## Codex rules
-
-Codex must not print, copy, transform, or commit secrets.
-
-Codex must not modify secret files unless explicitly authorized.
-
-If secret-looking values appear during inspection, Codex and Opus should refer to them generically without repeating the value.
-
-## Opus rules
-
-Opus must avoid including secret values in generated files or reports.
-
-## Validation requirements
-
-If env/schema behavior changes, validation must confirm required variables and failure behavior without exposing values.
+Check scope, validation evidence, rollback path, and whether human approval is required.

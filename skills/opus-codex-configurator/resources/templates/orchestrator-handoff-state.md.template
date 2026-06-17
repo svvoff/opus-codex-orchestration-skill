@@ -1,0 +1,41 @@
+# Orchestrator Handoff State
+
+## Current orchestrator
+
+Opus
+
+## Current mode
+
+primary
+
+## Reason
+
+Default mode.
+
+## Allowed scope
+
+Normal backlog-driven execution within repository policy.
+
+## Restrictions
+
+None beyond standard high-risk gates.
+
+## Last completed task
+
+None yet.
+
+## Current task
+
+None.
+
+## Files read for current context
+
+None yet.
+
+## Unresolved risks
+
+None recorded.
+
+## Next recommended action
+
+Read `docs/product/current-state.md` and `docs/product/backlog/index.md` before selecting work.

@@ -1,36 +1,17 @@
-# Profile: Production Config Risk Area
+# Risk Profile: production-config
 
 ## Category
 
 risk-area
 
-## When to use
+## Rule
 
-Use when a repository includes production environment config, release config, signing, deployment, CI/CD, or provider production settings.
+Production endpoints, env schemas, release config, bundle IDs, signing, and entitlements require explicit approval.
 
-## Detection signals
+## Codex default restriction
 
-- production env files;
-- release workflows;
-- deploy scripts;
-- signing config;
-- Firebase production config;
-- API base URLs;
-- Terraform/Kubernetes/Helm config.
+Do not modify this area unless the Codex Task Packet explicitly authorizes it.
 
-## Adds to project profile
+## Opus review focus
 
-- `risk_areas += ["production-config"]`
-- approval gate for production-impacting changes.
-
-## Codex rules
-
-Codex must not modify production configuration unless the task packet explicitly authorizes it.
-
-## Opus rules
-
-Opus must ask whether production config changes are allowed before generating tasks that may affect deployment, release, signing, or production services.
-
-## Validation requirements
-
-Require explicit evidence that production config was not changed, or a clearly authorized change summary if it was.
+Check scope, validation evidence, rollback path, and whether human approval is required.

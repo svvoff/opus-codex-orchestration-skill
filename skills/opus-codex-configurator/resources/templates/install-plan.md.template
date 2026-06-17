@@ -1,0 +1,47 @@
+# Target Repository Install Plan
+
+## Target repository
+
+Path: `<target-path>`
+
+Git repo: yes / no / unknown
+
+## Install mode
+
+- draft-only / install-after-approval / patch-existing-config
+
+## Files to create
+
+- `CLAUDE.md`
+- `CHATGPT.md`
+- `AGENTS.md`
+- `docs/product/...`
+- `docs/ai/...`
+
+## Files to modify
+
+- ...
+
+## Existing files to preserve
+
+- ...
+
+## Files requiring merge/diff review
+
+- ...
+
+## Read-only inspection summary
+
+- Repo shape:
+- Stack:
+- Validation discovered:
+- Risk areas:
+- Existing AI/product docs:
+
+## Assumptions
+
+- ...
+
+## Approval request
+
+Please confirm whether to write this configuration into `<target-path>`.

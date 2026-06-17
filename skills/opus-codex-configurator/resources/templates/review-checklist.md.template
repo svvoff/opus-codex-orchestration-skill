@@ -1,0 +1,43 @@
+# Opus Review Checklist
+
+## Scope
+
+- Did Codex stay within task scope?
+- Were non-goals respected?
+- Were forbidden areas untouched?
+
+## Correctness
+
+- Are acceptance criteria satisfied?
+- Are edge cases handled?
+- Is behavior consistent with product intent?
+
+## Architecture
+
+- Does the implementation follow existing patterns?
+- Does it avoid future-roadmap overbuilding?
+- Are SDK/platform/monetization integrations isolated when required?
+
+## Validation
+
+- Were required commands run?
+- Is evidence present?
+- Are skipped commands justified?
+- Are failures baseline or introduced?
+
+## Documentation
+
+- Should backlog/index be updated?
+- Should execution-state/log be updated?
+- Should decision/current-state be updated?
+
+## Decision
+
+Return one:
+
+- ACCEPT
+- REQUEST CHANGES
+- BLOCKED
+- SPLIT TASK
+- ESCALATE TO HUMAN
+- REVERT

@@ -1,0 +1,44 @@
+# Fallback Policy
+
+## Primary orchestrator
+
+Opus is the primary orchestrator for:
+
+- project discovery;
+- roadmap changes;
+- architecture decisions;
+- high-risk review;
+- validation policy changes;
+- normal backlog-driven execution.
+
+## Conservative fallback orchestrator
+
+ChatGPT may act as fallback when Opus is unavailable or token-limited.
+
+ChatGPT may:
+
+- continue low/medium-risk ready tasks;
+- create Codex Task Packets from existing task cards;
+- review Codex reports for low/medium-risk tasks;
+- update compact execution docs after acceptance.
+
+ChatGPT must ask for approval before:
+
+- high-risk tasks;
+- roadmap or product strategy changes;
+- architecture decisions;
+- validation policy changes;
+- auth/payments/ads/production/secrets/migrations/data-deletion work.
+
+## Codex-only emergency mode
+
+Codex-only mode is allowed only for trivial scoped work:
+
+- formatting/lint;
+- documentation-only changes;
+- test-only changes;
+- tiny bugfixes with explicit task cards.
+
+## No silent downgrade
+
+Any orchestrator change must be recorded in `docs/ai/orchestrator/handoff-state.md`.

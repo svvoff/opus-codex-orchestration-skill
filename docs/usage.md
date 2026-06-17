@@ -1,49 +1,105 @@
 # Usage
 
-## Intended workflow
+## 1. Primary workflow with Opus
 
-```text
-User asks Opus to configure current repo
-        ↓
-Opus uses this skill
-        ↓
-Opus inspects repo in read-only mode
-        ↓
-Opus produces Repository Inspection Report
-        ↓
-Opus maps findings to composable profiles
-        ↓
-Opus drafts missing profiles lazily when needed
-        ↓
-Opus builds validation model
-        ↓
-Opus generates configuration draft
-        ↓
-User reviews and approves
-        ↓
-Opus writes files to target repo
+Start in the skill/meta repository:
+
+```bash
+cd opus-codex-orchestration-skill
 ```
 
-## Example prompt
+Ask Opus:
 
 ```text
-Use the opus-codex-configurator skill to configure this repository.
-I want Opus to act as orchestrator and reviewer, and Codex to act as executor.
-Validation is very important. Start by inspecting the repo yourself.
+Обсудим новый проект: <описание проекта>
 ```
 
-## Expected generated files in target repo
+The `project-discovery` skill should ask one question at a time and produce a reviewable draft of product artifacts.
+
+Then ask:
 
 ```text
-CLAUDE.md
-AGENTS.md
-docs/ai/validation.md
-docs/ai/codex-task-template.md
-docs/ai/codex-report-template.md
-docs/ai/review-checklist.md
-docs/ai/escalation-policy.md
+Настрой связку Opus/ChatGPT + Codex под этот проект.
 ```
 
-## Important behavior
+The configurator should ask for the target repository path:
 
-The skill must not write generated files immediately. It first produces a draft for review. Files are written only after the user explicitly confirms.
+```text
+Куда установить конфигурацию связки?
+```
+
+After you provide a path, it should inspect the target repo in read-only mode, generate an install plan, show a draft, and write only after explicit approval.
+
+## 2. Fallback workflow through Codex CLI
+
+When Opus tokens are exhausted or the task is intentionally simple, start Codex in this meta-repo:
+
+```bash
+cd opus-codex-orchestration-skill
+codex
+```
+
+Call the repo-scoped fallback skill:
+
+```text
+$fallback-orchestrator обсудим новый проект
+```
+
+or:
+
+```text
+$fallback-orchestrator настрой связку для ../my-target-repo
+```
+
+The fallback skill should disclose fallback mode and operate conservatively.
+
+## 3. Work in the configured target repository
+
+After installation:
+
+```bash
+cd ../my-target-repo
+```
+
+Use Opus primary mode when available:
+
+```text
+делай следующую задачу
+```
+
+Or use fallback mode for simple low-risk tasks:
+
+```text
+$fallback-orchestrator делай следующую простую задачу
+```
+
+## 4. What the orchestrator should read
+
+For normal delivery, the orchestrator should read compact files first:
+
+- `docs/product/current-state.md`
+- `docs/product/backlog/index.md`
+- selected task card
+- `docs/ai/execution-state.md`
+- `docs/ai/validation/index.md`
+
+It should not read done/deferred/archive folders by default.
+
+## 5. Review this project with Opus
+
+Use:
+
+```text
+Ты — Opus primary orchestrator. Провалидируй этот meta-project. Начни с docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md и предложи patch plan.
+```
+
+Recommended files for Opus to read:
+
+1. `docs/PROJECT_ARCHITECTURE_FOR_OPUS_REVIEW.md`
+2. `README.md`
+3. `skills/project-discovery/SKILL.md`
+4. `skills/opus-codex-configurator/SKILL.md`
+5. `.codex/skills/fallback-orchestrator/SKILL.md`
+6. `shared/contracts/target-repository-installation.md`
+7. `shared/principles/context-budget-policy.md`
+8. `shared/principles/fallback-skill-safety.md`
