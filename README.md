@@ -156,12 +156,17 @@ Fallback mode is conservative. It should not silently replace Opus for high-risk
 ## Repository layout
 
 ```text
+.claude/
+  skills/                       # symlinks that make the Opus skills discoverable by Claude Code
+    project-discovery -> ../../skills/project-discovery
+    opus-codex-configurator -> ../../skills/opus-codex-configurator
+
 .codex/
   skills/
-    fallback-orchestrator/
+    fallback-orchestrator/      # Codex-hosted fallback skill
       SKILL.md
 
-skills/
+skills/                         # skill sources (linked into .claude/skills/)
   project-discovery/
     SKILL.md
     resources/templates/
@@ -173,9 +178,6 @@ skills/
       composition/
       profiles/
       templates/
-
-  codex-fallback-orchestrator/
-    SKILL.md
 
 shared/
   contracts/

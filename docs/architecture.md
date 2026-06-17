@@ -1,6 +1,6 @@
 # Architecture
 
-This repository defines a two-skill system for product discovery and AI-agent delivery.
+This repository defines a three-skill system for product discovery and AI-agent delivery.
 
 ```text
 Project idea / product discussion
@@ -38,9 +38,13 @@ The second skill configures the engineering-agent workflow:
 - generates Opus and Codex instructions;
 - configures backlog-driven execution.
 
+## Skill 3: fallback-orchestrator
+
+A repo-scoped Codex skill (`.codex/skills/fallback-orchestrator/`) that lets Codex CLI host a conservative ChatGPT fallback orchestrator when Opus is unavailable or the task is simple. It reuses the same shared contracts and stays read-only/draft-first, with stricter risk gates than primary mode.
+
 ## Shared contracts
 
-Both skills use the same shared contracts for:
+All three skills use the same shared contracts for:
 
 - project context;
 - roadmap stages;
@@ -48,11 +52,11 @@ Both skills use the same shared contracts for:
 - epic cards;
 - task cards;
 - execution state;
-- delivery loop;
+- the orchestrator contract (which defines the "do next task" delivery loop);
 - validation evidence;
 - context budget.
 
-Changing a shared contract changes the expectations for both skills.
+Changing a shared contract changes the expectations for all three skills.
 
 ## Token-aware design
 

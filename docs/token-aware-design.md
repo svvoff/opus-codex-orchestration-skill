@@ -12,14 +12,9 @@ Read archives only when necessary.
 
 ## Default files for “do next task”
 
-Read:
-
-- `docs/product/current-state.md`
-- `docs/product/backlog/index.md`
-- `docs/ai/execution-state.md`
-- `docs/ai/validation/index.md`
-- selected task card
-- referenced epic/decision/validation profile only when needed
+The exact read set is defined once in the canonical
+[`shared/principles/context-budget-policy.md`](../shared/principles/context-budget-policy.md)
+(Tier 0 delivery-loop read set + the selected task card). Do not restate it here; reference it.
 
 Do not read by default:
 

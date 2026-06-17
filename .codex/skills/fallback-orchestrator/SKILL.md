@@ -135,7 +135,7 @@ Allowed:
 
 - choose the next low-risk ready task;
 - prepare a Codex Task Packet;
-- execute docs-only/test-only/tiny scoped tasks when safe;
+- execute docs-only or test-only tasks when safe (any production code change requires a separate review turn);
 - require validation evidence;
 - update backlog/execution state after acceptance.
 
@@ -144,7 +144,7 @@ Restrictions:
 - do not approve high-risk tasks;
 - do not perform auth, payments, ads monetization, production config, migrations, data deletion, or security-sensitive work without human/Opus approval;
 - do not rewrite architecture or roadmap;
-- do not self-approve substantial code changes without explicit review evidence.
+- do not self-approve any production code change in the same turn that wrote it — a code change requires a separate review turn with diff + evidence; only docs-only/test-only work may be completed in a single session.
 
 ## Hard restrictions
 

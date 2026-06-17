@@ -1,3 +1,8 @@
+---
+name: project-discovery
+description: Turn an ambiguous project idea into structured product context and a token-aware execution backlog. Use to discuss a new project, define MVP and a staged roadmap, and produce project-brief/current-state/roadmap/backlog/epics/task-cards/decisions plus configurator-input for the downstream opus-codex-configurator. Asks one question at a time and is draft-first (writes only after approval).
+---
+
 # Project Discovery Skill
 
 ## Purpose

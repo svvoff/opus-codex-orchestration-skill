@@ -1,3 +1,8 @@
+---
+name: opus-codex-configurator
+description: Configure a model-agnostic orchestrator + Codex executor workflow for a target git repo. Use to inspect a target repository read-only, compose lazy profiles, build validation/risk/fallback policy, and generate CLAUDE.md/CHATGPT.md/AGENTS.md/ORCHESTRATOR.md and docs/ai config. Draft-first; writes into the target repo only after explicit approval.
+---
+
 # Opus-Codex Configurator Skill
 
 ## Purpose
@@ -193,7 +198,8 @@ Codex should not choose tasks. Codex executes only the task packet provided by O
 
 ## Token-aware reading policy
 
-When generating or operating the configuration, prefer:
+Tier 0 is defined canonically in `shared/principles/context-budget-policy.md`. The
+configurator additionally reads `configurator-input.md` (its upstream input). Prefer:
 
 - `docs/product/configurator-input.md`
 - `docs/product/current-state.md`

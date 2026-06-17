@@ -171,11 +171,6 @@ opus-codex-orchestration-skill/
         profiles/
         templates/
 
-    codex-fallback-orchestrator/
-      SKILL.md
-      references/
-      templates/
-
   shared/
     contracts/
     principles/
@@ -473,9 +468,9 @@ Defines safe installation flow:
 
 Defines how Codex CLI may host fallback orchestration without losing role separation.
 
-### Delivery Loop Contract
+### Delivery Loop
 
-Defines the runtime cycle for “do next task”.
+The "do next task" runtime cycle — trigger phrases, executor expectations, and completion criteria — is part of the Orchestrator Contract above, not a separate file.
 
 ### Task Card Contract
 
@@ -543,15 +538,9 @@ docs/ai/
 
 ### Default read policy
 
-For “do next task”, read:
-
-1. `docs/product/current-state.md`
-2. `docs/product/backlog/index.md`
-3. selected task card
-4. active epic if referenced
-5. relevant decision files if referenced
-6. `docs/ai/execution-state.md`
-7. `docs/ai/validation/index.md`
+For “do next task”, the read set is defined once in the canonical
+`shared/principles/context-budget-policy.md` (Tier 0 delivery-loop read set + the
+selected task card, plus referenced epic/decision only when needed).
 
 Do not read by default:
 
@@ -733,6 +722,27 @@ When Opus reviews this project, it should produce:
 - не переписывай всё без необходимости;
 - дай patch plan.
 ```
+
+## MVP cut (v1 essentials)
+
+The core loop — "discuss a project → configure a target repo → do next task" — must be
+proven end-to-end once before the meta-project grows further. The following is the v1
+cut. Nothing here is deleted; deferred items are kept but marked post-v1.
+
+**Core (needed to run the loop once):**
+
+- Skills: `project-discovery`, `opus-codex-configurator`, `fallback-orchestrator`.
+- Contracts: `orchestrator-contract`, `task-card`, `backlog-index`, `execution-state`, `validation-evidence`, `target-repository-installation`, `project-context-packet`, `configurator-input-packet`.
+- Principles: `context-budget-policy`, `draft-first-write-after-approval`, `evidence-based-validation`, `conservative-fallback-mode`, `no-silent-downgrade`.
+- Vocabulary: `task-statuses`, `risk-taxonomy`, `validation-levels`.
+
+**Deferred until after the first proven run (post-v1):**
+
+- Contracts: `epic-card`, `product-roadmap-packet`, `orchestrator-handoff-state`, `current-context`, `execution-log`, `model-capability-matrix`, `codex-fallback-skill`, `fallback-policy`.
+- Principles: `archive-by-default`, `compact-ledgers`, `current-state-over-full-history`, `future-aware-not-future-built`, `index-first-reading`, `backlog-driven-execution`, `model-agnostic-orchestration` (several are philosophy docs that restate each other — candidates for merging later).
+- Vocabulary: `roadmap-stages`, `requirement-levels`.
+
+**Stance:** do not add new contracts or principles until the core loop has run end-to-end at least once. After that run, revisit the deferred set and merge overlapping philosophy docs rather than adding more.
 
 ## Current architectural stance
 
