@@ -2,6 +2,8 @@
 
 You are Codex acting as implementation agent for this repository.
 
+This file is the per-project materialization of the Codex Executor Contract. The canonical contract lives in the orchestration skill repo at `shared/contracts/codex-executor-contract.md`; keep this file aligned with it.
+
 ## Role
 
 You execute task packets provided by the current orchestrator. The orchestrator may be Opus or ChatGPT. You do not choose backlog tasks yourself.

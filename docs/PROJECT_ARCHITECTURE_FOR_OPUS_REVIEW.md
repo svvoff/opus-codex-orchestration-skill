@@ -452,6 +452,18 @@ Defines responsibilities of any orchestrator:
 - update status docs;
 - preserve validation requirements.
 
+### Codex Executor Contract
+
+The executor-side counterpart of the Orchestrator Contract. Defines Codex's hard constraints as executor:
+
+- execute only the provided task packet; never select or re-scope;
+- respect allowed/forbidden areas; stop and report if a change would touch a forbidden area;
+- mandatory report fields (changed files, commands, results, validation evidence, scope check, risks, incomplete items);
+- no self-direction, no roadmap/architecture decisions, no validation weakening;
+- escalate on ambiguity instead of guessing.
+
+The generated `AGENTS.md` is the per-project materialization of this contract.
+
 ### Target Repository Installation Contract
 
 Defines safe installation flow:
@@ -732,7 +744,7 @@ cut. Nothing here is deleted; deferred items are kept but marked post-v1.
 **Core (needed to run the loop once):**
 
 - Skills: `project-discovery`, `opus-codex-configurator`, `fallback-orchestrator`.
-- Contracts: `orchestrator-contract`, `task-card`, `backlog-index`, `execution-state`, `validation-evidence`, `target-repository-installation`, `project-context-packet`, `configurator-input-packet`.
+- Contracts: `orchestrator-contract`, `codex-executor-contract`, `task-card`, `backlog-index`, `execution-state`, `validation-evidence`, `target-repository-installation`, `project-context-packet`, `configurator-input-packet`.
 - Principles: `context-budget-policy`, `draft-first-write-after-approval`, `evidence-based-validation`, `conservative-fallback-mode`, `no-silent-downgrade`.
 - Vocabulary: `task-statuses`, `risk-taxonomy`, `validation-levels`.
 
@@ -743,6 +755,8 @@ cut. Nothing here is deleted; deferred items are kept but marked post-v1.
 - Vocabulary: `roadmap-stages`, `requirement-levels`.
 
 **Stance:** do not add new contracts or principles until the core loop has run end-to-end at least once. After that run, revisit the deferred set and merge overlapping philosophy docs rather than adding more.
+
+**v1 amendment — `codex-executor-contract` promoted into Core.** This is a deliberate exception to the stance above, not a drift from it. The executor is the safety lynchpin of the orchestrator/executor split: the whole model relies on Codex executing only the task packet, staying in scope, and reporting evidence. Leaving the executor as a 4-line subsection while the orchestrator has a first-class contract is an asymmetry in the most safety-critical role. The contract consolidates material that already existed (`AGENTS.md.template`, the "Executor expectations" subsection of `orchestrator-contract`, and `codex-report-template`) rather than adding net-new scope — so it does not trigger the growth the stance guards against. No other contract is promoted; the deferred set stands.
 
 ## Current architectural stance
 

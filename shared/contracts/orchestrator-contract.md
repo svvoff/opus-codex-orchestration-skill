@@ -54,6 +54,10 @@ Codex, as executor, must:
 
 Codex does not choose tasks.
 
+The full executor-side constraints (allowed/forbidden areas, mandatory report
+fields, no self-direction, escalate-don't-guess) are defined in
+`codex-executor-contract.md`.
+
 ## Standard decisions
 
 An orchestrator review must return one of:

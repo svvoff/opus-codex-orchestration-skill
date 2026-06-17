@@ -53,6 +53,7 @@ All three skills use the same shared contracts for:
 - task cards;
 - execution state;
 - the orchestrator contract (which defines the "do next task" delivery loop);
+- the codex executor contract (the executor-side counterpart: stay in scope, report evidence);
 - validation evidence;
 - context budget.
 
