@@ -27,8 +27,8 @@ Used when the primary orchestrator is unavailable or token-limited. Usually Chat
 Allowed:
 
 - continue low/medium-risk ready tasks;
-- create Codex Task Packets from existing task cards;
-- review Codex reports for low/medium-risk tasks;
+- create Task Packets from existing task cards;
+- review execution reports for low/medium-risk tasks;
 - update task status and compact execution docs;
 - ask the user for approval when the next task is high-risk or strategic.
 

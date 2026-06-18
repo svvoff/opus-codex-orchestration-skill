@@ -1,6 +1,6 @@
 # Contract: Validation Evidence
 
-A Codex report must include validation evidence.
+An execution report must include validation evidence.
 
 ## Required fields
 

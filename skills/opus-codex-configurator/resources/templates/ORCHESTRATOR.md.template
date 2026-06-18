@@ -2,21 +2,21 @@
 
 This file defines the model-agnostic orchestration contract for this repository.
 
-The orchestrator may be Opus, ChatGPT, or another approved reasoning model. Codex remains the implementation executor.
+The orchestrator may be Opus, ChatGPT, or another approved reasoning model. The executor is pluggable (Codex or Claude Code), selected at configuration time and recorded as `active_executor` in `docs/ai/execution-state.md`. Executor behavior is defined in `EXECUTOR.md`.
 
 ## Current intended setup
 
 - Primary orchestrator: Opus
 - Conservative fallback orchestrator: ChatGPT
-- Executor: Codex
+- Executor: <active_executor> (Codex or Claude Code; see `EXECUTOR.md`)
 
 ## Required behavior for any orchestrator
 
 1. Read compact routing files before detailed files.
 2. Use product context and backlog state instead of memory.
 3. Choose tasks only from ready/unblocked task cards.
-4. Create scoped Codex Task Packets.
-5. Require validation evidence from Codex.
+4. Create scoped Task Packets.
+5. Require validation evidence from the executor.
 6. Review output against acceptance criteria and risk policy.
 7. Update project docs only after accepted work.
 8. Escalate work outside the current orchestrator mode.
@@ -43,8 +43,8 @@ Do not read archives by default.
 4. Select the next ready unblocked task.
 5. Check task risk against current mode.
 6. Ask the user before high-risk fallback execution.
-7. Create Codex Task Packet.
-8. Review Codex report and validation evidence.
+7. Create Task Packet.
+8. Review the executor.s report and validation evidence.
 9. Update task status and compact logs after acceptance.
 
 ## Review decisions

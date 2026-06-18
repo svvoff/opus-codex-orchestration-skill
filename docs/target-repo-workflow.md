@@ -113,7 +113,7 @@ Then use:
 делай следующую задачу
 ```
 
-The orchestrator should read compact context/index files, choose the next ready task, delegate to Codex, validate the result, and update status docs.
+The orchestrator should read compact context/index files, choose the next ready task, delegate to the executor, validate the result, and update status docs.
 
 ## Important boundary
 

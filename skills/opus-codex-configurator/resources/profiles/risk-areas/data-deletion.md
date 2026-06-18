@@ -10,7 +10,7 @@ Data deletion is high-risk and requires explicit human approval and rollback/bac
 
 ## Codex default restriction
 
-Do not modify this area unless the Codex Task Packet explicitly authorizes it.
+Do not modify this area unless the Task Packet explicitly authorizes it.
 
 ## Opus review focus
 

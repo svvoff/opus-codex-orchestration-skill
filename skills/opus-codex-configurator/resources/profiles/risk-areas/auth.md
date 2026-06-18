@@ -10,7 +10,7 @@ Authentication, authorization, permissions, session, and identity logic are high
 
 ## Codex default restriction
 
-Do not modify this area unless the Codex Task Packet explicitly authorizes it.
+Do not modify this area unless the Task Packet explicitly authorizes it.
 
 ## Opus review focus
 

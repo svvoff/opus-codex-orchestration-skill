@@ -10,7 +10,7 @@ Platform SDKs, platform rules, moderation, publishing, and compliance are risk a
 
 ## Codex default restriction
 
-Do not modify this area unless the Codex Task Packet explicitly authorizes it.
+Do not modify this area unless the Task Packet explicitly authorizes it.
 
 ## Opus review focus
 

@@ -12,4 +12,4 @@ Roadmap context should influence boundaries and guardrails, not cause premature 
 
 - Building the post-MVP shop, leaderboard, analytics, or live ops systems during MVP without task approval.
 - Adding complex abstractions solely because they might be useful later.
-- Expanding Codex task scope beyond the current task card.
+- Expanding executor task scope beyond the current task card.

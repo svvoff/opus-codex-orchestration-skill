@@ -12,6 +12,7 @@ Compact state file for the current delivery loop.
 
 ## Required sections
 
+- Active executor (`codex` or `claude-code`; switch only at task boundaries)
 - Current milestone
 - Current task
 - Last execution result

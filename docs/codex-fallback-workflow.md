@@ -7,8 +7,8 @@ This document explains how to use Codex CLI as a conservative ChatGPT fallback o
 The system has three runtime modes:
 
 ```text
-Primary:   Opus orchestrator   -> Codex executor
-Fallback:  ChatGPT orchestrator -> Codex executor
+Primary:   Opus orchestrator   -> executor (Codex or Claude Code)
+Fallback:  ChatGPT orchestrator -> executor (Codex or Claude Code)
 Emergency: Codex-only for trivial scoped tasks
 ```
 
@@ -88,7 +88,7 @@ The fallback skill should:
 5. read `docs/product/backlog/index.md`;
 6. choose only a low-risk ready task;
 7. read only the selected task card;
-8. execute or prepare a Codex Task Packet;
+8. execute or prepare a Task Packet;
 9. require validation evidence;
 10. update status docs only after acceptance.
 

@@ -4,7 +4,7 @@
 
 Define a model-agnostic contract for any orchestrator that controls Codex execution.
 
-The orchestrator may be Opus, ChatGPT, or another capable reasoning model. The executor remains Codex.
+The orchestrator may be Opus, ChatGPT, or another capable reasoning model. The executor may be Codex, Claude Code, or another agent (see `executor-contract.md`).
 
 ## Trigger phrases
 
@@ -23,9 +23,9 @@ An orchestrator must:
 2. verify docs consistency before trusting the index — run `scripts/verify-docs.sh` (or the copy installed in the target repo) and fix any ERROR before selecting a task; a stale index means the wrong task gets chosen;
 3. respect product context, roadmap, backlog, risk policy, and validation policy;
 4. choose the next task only from ready/unblocked task cards;
-5. create a scoped Codex Task Packet;
-6. require Codex validation evidence;
-7. review Codex output against acceptance criteria;
+5. create a scoped Task Packet;
+6. require executor validation evidence;
+7. review executor output against acceptance criteria;
 8. update project docs after accepted work;
 9. refuse or escalate work outside its allowed mode.
 
@@ -45,18 +45,18 @@ Read selected task cards, active epics, validation profiles, and active decision
 
 ## Executor expectations
 
-Codex, as executor, must:
+An executor must:
 
 1. execute only the provided task packet;
 2. stay in scope;
 3. validate with evidence;
 4. report changed files, commands, results, risks, and incomplete items.
 
-Codex does not choose tasks.
+The executor does not choose tasks.
 
 The full executor-side constraints (allowed/forbidden areas, mandatory report
 fields, no self-direction, escalate-don't-guess) are defined in
-`codex-executor-contract.md`.
+`executor-contract.md`.
 
 ## Standard decisions
 

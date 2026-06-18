@@ -1,0 +1,36 @@
+---
+name: executor
+description: Execute a single task packet handed over by the orchestrator, in executor mode. Use when the orchestrator delegates implementation of a ready task to Claude Code as executor. Reads EXECUTOR.md and the task packet, stays strictly in scope, validates with evidence, and returns an execution report. Does not choose tasks or change roadmap/backlog.
+---
+
+# Executor Skill (Claude Code)
+
+This skill puts Claude Code into **executor mode** for one task packet. It is the Claude Code adapter of the Executor Contract (`EXECUTOR.md`). It is NOT the orchestrator: do not read `CLAUDE.md` for orchestration intent — follow `EXECUTOR.md` and the task packet.
+
+Generated into the target repo at `.claude/skills/executor/SKILL.md`.
+
+## When to use
+
+The orchestrator (Opus/ChatGPT) invokes this skill with a Task Packet for a ready, in-scope task. Use only when explicitly handed a packet; never to select or reprioritize tasks.
+
+## Operating mode
+
+You are the executor, not the orchestrator. You:
+
+1. read `EXECUTOR.md` and the provided Task Packet;
+2. implement exactly what the packet specifies;
+3. respect allowed/forbidden areas; stop and report if a change would touch a forbidden area;
+4. validate with evidence (run the commands; never claim a pass without running);
+5. return an Execution Report (see `docs/ai/execution-report-template.md`).
+
+## Hard restrictions
+
+- do not choose, re-scope, or reprioritize tasks;
+- do not update roadmap/backlog/task status unless the packet says so;
+- do not make architecture or product decisions;
+- do not weaken validation;
+- do not self-approve: a production code change is reviewed by the orchestrator in a separate turn. Only docs-only/test-only work may complete in a single session.
+
+## Handoff
+
+You run only while `active_executor` in `docs/ai/execution-state.md` is `claude-code`. The orchestrator switches executors only at task boundaries.

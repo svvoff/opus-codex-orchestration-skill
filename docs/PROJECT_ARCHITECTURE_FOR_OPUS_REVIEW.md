@@ -7,8 +7,8 @@ This document is a detailed architectural brief for Opus or another strong orche
 The project is intended to become a reusable skill system for configuring an AI-assisted delivery workflow around:
 
 ```text
-Primary:   Opus orchestrator   -> Codex executor
-Fallback:  ChatGPT orchestrator -> Codex executor
+Primary:   Opus orchestrator   -> executor (Codex or Claude Code)
+Fallback:  ChatGPT orchestrator -> executor (Codex or Claude Code)
 Emergency: Codex-only for trivial scoped tasks
 ```
 
@@ -80,7 +80,7 @@ The system should generate project-specific configuration for:
 
 - Opus as primary orchestrator;
 - ChatGPT as conservative fallback orchestrator;
-- Codex as executor;
+- a pluggable executor (Codex or Claude Code);
 - Codex-only mode for trivial tasks.
 
 Generated files should include, at minimum:
@@ -108,9 +108,9 @@ The orchestrator should:
 1. read compact current/index files;
 2. choose the next ready task;
 3. check dependencies and risk;
-4. form a Codex Task Packet;
-5. delegate implementation to Codex;
-6. review Codex Execution Report;
+4. form a Task Packet;
+5. delegate implementation to the executor;
+6. review Execution Report;
 7. require validation evidence;
 8. update backlog/status/docs;
 9. report results.
@@ -228,7 +228,7 @@ docs/product/
 - ask one question at a time;
 - distinguish facts, assumptions, decisions, and open questions;
 - create roadmap beyond MVP, but keep MVP from being overbuilt;
-- create backlog and task cards that can become Codex Task Packets;
+- create backlog and task cards that can become Task Packets;
 - use token-aware file structure;
 - do not write into target repo without approval.
 
@@ -452,9 +452,9 @@ Defines responsibilities of any orchestrator:
 - update status docs;
 - preserve validation requirements.
 
-### Codex Executor Contract
+### Executor Contract
 
-The executor-side counterpart of the Orchestrator Contract. Defines Codex's hard constraints as executor:
+The model-independent executor-side counterpart of the Orchestrator Contract. Defines any executor's hard constraints (Codex, Claude Code, or another agent):
 
 - execute only the provided task packet; never select or re-scope;
 - respect allowed/forbidden areas; stop and report if a change would touch a forbidden area;
@@ -462,7 +462,7 @@ The executor-side counterpart of the Orchestrator Contract. Defines Codex's hard
 - no self-direction, no roadmap/architecture decisions, no validation weakening;
 - escalate on ambiguity instead of guessing.
 
-The generated `AGENTS.md` is the per-project materialization of this contract.
+Each executor has an adapter that materializes this contract: `AGENTS.md` for Codex, the `.claude/skills/executor/` skill for Claude Code.
 
 ### Target Repository Installation Contract
 
@@ -619,14 +619,14 @@ Instead:
 - `ORCHESTRATOR.md` holds model-independent orchestration rules;
 - `CLAUDE.md` adapts those rules for Opus;
 - `CHATGPT.md` adapts them for conservative fallback;
-- `AGENTS.md` instructs Codex executor mode.
+- `AGENTS.md` instructs Codex executor mode; the `.claude/skills/executor/` skill instructs Claude Code executor mode.
 
 This enables:
 
 ```text
 Opus primary orchestrator
 ChatGPT fallback orchestrator
-Codex executor
+executor (Codex or Claude Code)
 Codex-only emergency mode
 ```
 
@@ -744,7 +744,7 @@ cut. Nothing here is deleted; deferred items are kept but marked post-v1.
 **Core (needed to run the loop once):**
 
 - Skills: `project-discovery`, `opus-codex-configurator`, `fallback-orchestrator`.
-- Contracts: `orchestrator-contract`, `codex-executor-contract`, `task-card`, `backlog-index`, `execution-state`, `validation-evidence`, `target-repository-installation`, `project-context-packet`, `configurator-input-packet`.
+- Contracts: `orchestrator-contract`, `executor-contract`, `task-card`, `backlog-index`, `execution-state`, `validation-evidence`, `target-repository-installation`, `project-context-packet`, `configurator-input-packet`.
 - Principles: `context-budget-policy`, `draft-first-write-after-approval`, `evidence-based-validation`, `conservative-fallback-mode`, `no-silent-downgrade`.
 - Vocabulary: `task-statuses`, `risk-taxonomy`, `validation-levels`.
 
@@ -756,7 +756,7 @@ cut. Nothing here is deleted; deferred items are kept but marked post-v1.
 
 **Stance:** do not add new contracts or principles until the core loop has run end-to-end at least once. After that run, revisit the deferred set and merge overlapping philosophy docs rather than adding more.
 
-**v1 amendment — `codex-executor-contract` promoted into Core.** This is a deliberate exception to the stance above, not a drift from it. The executor is the safety lynchpin of the orchestrator/executor split: the whole model relies on Codex executing only the task packet, staying in scope, and reporting evidence. Leaving the executor as a 4-line subsection while the orchestrator has a first-class contract is an asymmetry in the most safety-critical role. The contract consolidates material that already existed (`AGENTS.md.template`, the "Executor expectations" subsection of `orchestrator-contract`, and `codex-report-template`) rather than adding net-new scope — so it does not trigger the growth the stance guards against. No other contract is promoted; the deferred set stands.
+**v1 amendment — `executor-contract` promoted into Core.** This is a deliberate exception to the stance above, not a drift from it. The executor is the safety lynchpin of the orchestrator/executor split: the whole model relies on the executor running only the task packet, staying in scope, and reporting evidence. Leaving the executor as a 4-line subsection while the orchestrator has a first-class contract is an asymmetry in the most safety-critical role. The contract consolidates material that already existed (`AGENTS.md.template`, the "Executor expectations" subsection of `orchestrator-contract`, and the report template) rather than adding net-new scope — so it does not trigger the growth the stance guards against. The contract is model-independent so the executor can be swapped (Codex or Claude Code) without touching it. No other contract is promoted; the deferred set stands.
 
 ## Current architectural stance
 

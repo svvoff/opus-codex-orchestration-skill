@@ -10,7 +10,7 @@ Schema/data migrations require dry-run, rollback plan, and explicit approval whe
 
 ## Codex default restriction
 
-Do not modify this area unless the Codex Task Packet explicitly authorizes it.
+Do not modify this area unless the Task Packet explicitly authorizes it.
 
 ## Opus review focus
 

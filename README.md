@@ -7,8 +7,8 @@ It is not the app/game/backend being built. It is the reusable skill system used
 ## Core runtime model
 
 ```text
-Primary:   Opus orchestrator   -> Codex executor
-Fallback:  ChatGPT orchestrator -> Codex executor
+Primary:   Opus orchestrator   -> executor (Codex or Claude Code)
+Fallback:  ChatGPT orchestrator -> executor (Codex or Claude Code)
 Emergency: Codex-only for trivial scoped tasks
 ```
 
@@ -33,7 +33,7 @@ The intended result is a configured target repository where the user can say:
 делай следующую задачу
 ```
 
-and the orchestrator will choose the next ready task, delegate to Codex, validate the result, update docs/status, and report back.
+and the orchestrator will choose the next ready task, delegate to the executor, validate the result, update docs/status, and report back.
 
 ## Canonical workflow
 
@@ -123,7 +123,7 @@ Then use:
 делай следующую задачу
 ```
 
-The configured orchestrator reads compact index/current-state files, picks the next ready task, creates a Codex Task Packet, reviews Codex output, requires validation evidence, and updates status docs.
+The configured orchestrator reads compact index/current-state files, picks the next ready task, creates a Task Packet, reviews the executor.s output, requires validation evidence, and updates status docs.
 
 ## Fallback usage
 
@@ -151,7 +151,7 @@ Fallback mode is conservative. It should not silently replace Opus for high-risk
 - Use token-aware reading: index first, archive by default.
 - Keep Opus for strategic/high-risk work.
 - Use ChatGPT fallback for conservative continuation.
-- Keep Codex as executor unless explicitly in fallback mode.
+- The executor is pluggable (Codex or Claude Code); switch only at task boundaries.
 
 ## Repository layout
 

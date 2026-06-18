@@ -17,4 +17,4 @@ A compact ledger should preserve:
 - changed areas;
 - unresolved follow-up.
 
-It should not duplicate full Codex reports.
+It should not duplicate full execution reports.

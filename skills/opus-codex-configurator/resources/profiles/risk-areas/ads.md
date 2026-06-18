@@ -10,7 +10,7 @@ Ad SDKs, rewarded ads, interstitials, and monetization triggers are medium/high 
 
 ## Codex default restriction
 
-Do not modify this area unless the Codex Task Packet explicitly authorizes it.
+Do not modify this area unless the Task Packet explicitly authorizes it.
 
 ## Opus review focus
 

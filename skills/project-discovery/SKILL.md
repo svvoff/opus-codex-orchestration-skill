@@ -99,7 +99,7 @@ Create:
 - validation expectations;
 - risk flags.
 
-Ready tasks must be self-contained enough for Opus to create a Codex Task Packet later.
+Ready tasks must be self-contained enough for Opus to create a Task Packet later.
 
 ### Phase 4 — Configurator bridge
 

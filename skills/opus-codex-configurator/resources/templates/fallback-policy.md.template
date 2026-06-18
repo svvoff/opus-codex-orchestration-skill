@@ -18,8 +18,8 @@ ChatGPT may act as fallback when Opus is unavailable or token-limited.
 ChatGPT may:
 
 - continue low/medium-risk ready tasks;
-- create Codex Task Packets from existing task cards;
-- review Codex reports for low/medium-risk tasks;
+- create Task Packets from existing task cards;
+- review execution reports for low/medium-risk tasks;
 - update compact execution docs after acceptance.
 
 ChatGPT must ask for approval before:

@@ -1,6 +1,6 @@
 # Profile: Evidence Contract
 
-Codex reports must include exact commands and results.
+Execution reports must include exact commands and results.
 
 If validation cannot be run, Codex must explain:
 

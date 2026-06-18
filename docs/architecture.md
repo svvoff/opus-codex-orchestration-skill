@@ -53,7 +53,7 @@ All three skills use the same shared contracts for:
 - task cards;
 - execution state;
 - the orchestrator contract (which defines the "do next task" delivery loop);
-- the codex executor contract (the executor-side counterpart: stay in scope, report evidence);
+- the executor contract (the model-independent executor-side counterpart: stay in scope, report evidence);
 - validation evidence;
 - context budget.
 
@@ -75,8 +75,8 @@ The target repository should not store all product/backlog/execution history in 
 The generated target-project configuration can support more than one orchestrator:
 
 ```text
-Primary: Opus orchestrator -> Codex executor
-Fallback: ChatGPT orchestrator -> Codex executor
+Primary: Opus orchestrator -> executor (Codex or Claude Code)
+Fallback: ChatGPT orchestrator -> executor (Codex or Claude Code)
 Emergency: Codex-only for trivial scoped tasks
 ```
 
@@ -86,6 +86,6 @@ The key design choice is to move orchestration behavior into a shared contract:
 docs/ai/orchestrator/ORCHESTRATOR.md
 ```
 
-`CLAUDE.md` becomes the primary-orchestrator wrapper for Opus. `CHATGPT.md` becomes the conservative fallback wrapper. `AGENTS.md` remains the executor contract for Codex.
+`CLAUDE.md` becomes the primary-orchestrator wrapper for Opus. `CHATGPT.md` becomes the conservative fallback wrapper. `AGENTS.md` is the Codex executor adapter; the Claude Code executor adapter is the `.claude/skills/executor/` skill. Both materialize the shared executor contract.
 
 Fallback mode is intentionally conservative. It can continue low/medium-risk ready tasks, but it should not silently approve high-risk work, roadmap changes, architecture changes, or weaker validation.

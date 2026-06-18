@@ -1,0 +1,43 @@
+# EXECUTOR.md
+
+This file defines the model-independent executor runtime for this repository.
+
+The executor implements task packets handed to it by the current orchestrator. The executor may be Codex or Claude Code; the active one is recorded as `active_executor` in `docs/ai/execution-state.md`. The canonical constraints live in the orchestration skill repo at `shared/contracts/executor-contract.md`; keep this file aligned with it.
+
+## Adapters
+
+- Codex: `AGENTS.md` (Codex CLI reads it automatically).
+- Claude Code: the `.claude/skills/executor/` skill (the orchestrator invokes it with a task packet).
+
+Only one executor is active at a time. Switching executors is allowed only at task boundaries and must update `active_executor` in `docs/ai/execution-state.md`.
+
+## Required behavior for any executor
+
+1. Execute only the provided task packet; never select, re-scope, or substitute tasks.
+2. Respect the task card's allowed/forbidden areas; stop and report if a change would touch a forbidden area.
+3. Stay within scope and non-goals; make the smallest coherent change.
+4. Validate with evidence; never claim a command passed without running it.
+5. Make no self-directed roadmap/architecture/sequencing/backlog decisions.
+6. Never weaken validation to make checks pass.
+7. Escalate on ambiguity or missing context; ask the orchestrator, do not guess.
+
+## Execution report
+
+Return an Execution Report (template: `docs/ai/execution-report-template.md`) with:
+
+- changed files;
+- commands run;
+- results;
+- validation evidence (command, result, relevant output);
+- not run / skipped, with residual risk;
+- scope check (forbidden areas untouched);
+- risks;
+- incomplete items / follow-ups.
+
+## Single-session discipline
+
+When the orchestrator and the executor are the same product (e.g. Claude Code acting as executor under an Opus orchestrator), keep the roles in separate turns: the executor implements, the orchestrator reviews in a distinct turn. Docs-only or test-only work may complete in one session; any production code change requires a separate review turn.
+
+## Non-negotiable rule
+
+No validation evidence = the orchestrator cannot accept.

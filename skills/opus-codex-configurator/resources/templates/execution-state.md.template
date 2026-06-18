@@ -1,5 +1,11 @@
 # Execution State
 
+## Active executor
+
+<codex | claude-code>
+
+Switch only at task boundaries. Record the change here when the executor changes.
+
 ## Current milestone
 
 ## Current task

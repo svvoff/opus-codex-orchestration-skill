@@ -12,7 +12,7 @@ When the target project has product backlog/task cards.
 
 - Select tasks from backlog, not memory.
 - Check dependencies and risk.
-- Convert selected task to Codex Task Packet.
+- Convert selected task to Task Packet.
 - Update status after review.
 
 ## Codex rules

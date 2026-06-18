@@ -1,13 +1,13 @@
 ---
 name: opus-codex-configurator
-description: Configure a model-agnostic orchestrator + Codex executor workflow for a target git repo. Use to inspect a target repository read-only, compose lazy profiles, build validation/risk/fallback policy, and generate CLAUDE.md/CHATGPT.md/AGENTS.md/ORCHESTRATOR.md and docs/ai config. Draft-first; writes into the target repo only after explicit approval.
+description: Configure a model-agnostic orchestrator + pluggable executor (Codex or Claude Code) workflow for a target git repo. Use to inspect a target repository read-only, compose lazy profiles, build validation/risk/fallback policy, and generate CLAUDE.md/CHATGPT.md/ORCHESTRATOR.md/EXECUTOR.md, the executor adapter (AGENTS.md or the executor skill), and docs/ai config. Draft-first; writes into the target repo only after explicit approval.
 ---
 
 # Opus-Codex Configurator Skill
 
 ## Purpose
 
-Configure a model-agnostic orchestrator + Codex executor workflow for a target git project. Opus is the primary orchestrator; ChatGPT may be configured as conservative fallback.
+Configure a model-agnostic orchestrator + pluggable executor workflow for a target git project. Opus is the primary orchestrator; ChatGPT may be configured as conservative fallback. The executor may be Codex or Claude Code, selected at configuration time and switchable at task boundaries.
 
 This skill consumes product context from `project-discovery` when present, inspects the repository, composes lazy profiles, builds validation policy, generates model-agnostic orchestration rules, and generates draft configuration files.
 
@@ -142,26 +142,39 @@ When the user wants fallback support, generate a shared orchestrator contract:
 docs/ai/orchestrator/ORCHESTRATOR.md
 docs/ai/orchestrator/fallback-policy.md
 docs/ai/orchestrator/handoff-state.md
+docs/ai/EXECUTOR.md
 CLAUDE.md
 CHATGPT.md
-AGENTS.md
+<executor adapter(s) — see executor selection below>
 ```
 
 Rules:
 
 1. Opus is primary orchestrator.
 2. ChatGPT is conservative fallback orchestrator.
-3. Codex remains executor.
-4. Codex must execute task packets from the current orchestrator without choosing tasks itself.
+3. The executor is pluggable (Codex or Claude Code), recorded as `active_executor` in `docs/ai/execution-state.md`.
+4. The executor executes task packets from the current orchestrator without choosing tasks itself.
 5. Fallback mode must not silently weaken validation, risk gates, or documentation updates.
 6. High-risk work in fallback mode requires explicit user approval.
-7. Switching orchestrators must update `handoff-state.md`.
+7. Switching orchestrators must update `handoff-state.md`; switching executors is allowed only at task boundaries and must update `active_executor`.
 
 Use capability modes instead of assuming all orchestrator models have equal authority:
 
 - primary;
 - conservative-fallback;
 - emergency-codex-only.
+
+## Executor selection policy
+
+Do not assume Codex is the only executor.
+
+1. Ask which executor the project should use: Codex, Claude Code, or both.
+2. Generate `docs/ai/EXECUTOR.md` (the model-independent executor runtime) in all cases.
+3. Generate the matching adapter(s):
+   - Codex → `AGENTS.md` (from `AGENTS.md.template`);
+   - Claude Code → `.claude/skills/executor/SKILL.md` (from `executor-skill.SKILL.md.template`).
+4. Set `active_executor` in `docs/ai/execution-state.md` to the chosen default.
+5. The orchestrator routes each task packet to the active executor and may switch only at task boundaries.
 
 ## Validation-first policy
 
@@ -174,7 +187,7 @@ Every generated configuration must include:
 - commands discovered from repo;
 - fallback manual validation when automation does not exist.
 
-Codex cannot claim success without evidence.
+The executor cannot claim success without evidence.
 
 Opus cannot accept a task without validation evidence or a justified exception.
 
@@ -190,11 +203,11 @@ Opus should:
 4. choose the next unblocked ready task;
 5. check risk and dependencies;
 6. ask for approval if high-risk;
-7. create a Codex Task Packet;
-8. review Codex report/evidence;
+7. create a Task Packet;
+8. review executor report/evidence;
 9. update task status, backlog index, execution state, and compact logs.
 
-Codex should not choose tasks. Codex executes only the task packet provided by Opus.
+The executor does not choose tasks; it executes only the task packet provided by the orchestrator.
 
 ## Token-aware reading policy
 
@@ -253,16 +266,18 @@ Generated target files may include:
 ```text
 CLAUDE.md
 CHATGPT.md
-AGENTS.md
 docs/ai/orchestrator/ORCHESTRATOR.md
 docs/ai/orchestrator/fallback-policy.md
 docs/ai/orchestrator/handoff-state.md
+docs/ai/EXECUTOR.md
+AGENTS.md                       # Codex executor adapter (if Codex selected)
+.claude/skills/executor/SKILL.md # Claude Code executor adapter (if Claude Code selected)
 docs/ai/validation/index.md
 docs/ai/execution-policy.md
 docs/ai/execution-state.md
 docs/ai/current-context.md
-docs/ai/codex-task-template.md
-docs/ai/codex-report-template.md
+docs/ai/task-packet-template.md
+docs/ai/execution-report-template.md
 docs/ai/review-checklist.md
 ```
 

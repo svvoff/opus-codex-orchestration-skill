@@ -16,7 +16,7 @@ ChatGPT/OpenAI model hosted through Codex CLI. Owns conservative continuation wh
 
 ### Executor
 
-Codex acting in normal executor mode. Implements a provided Codex Task Packet and returns evidence.
+Codex acting in normal executor mode. Implements a provided Task Packet and returns evidence.
 
 ## Invariant
 

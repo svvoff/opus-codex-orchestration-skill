@@ -12,16 +12,19 @@ Use this profile when the target project should support more than one orchestrat
 
 - primary orchestrator;
 - conservative fallback orchestrator;
-- Codex executor remains fixed;
+- pluggable executor (Codex or Claude Code), recorded as `active_executor`;
+- executor adapter(s): `AGENTS.md` (Codex) and/or `.claude/skills/executor/` (Claude Code), both materializing `EXECUTOR.md`;
 - no-silent-downgrade policy;
 - handoff-state tracking;
 - model capability matrix.
 
-## Codex rules
+## Executor rules
 
-Codex must execute only the task packet provided by the current orchestrator.
+The executor must execute only the task packet provided by the current orchestrator.
 
-Codex should not infer whether the orchestrator is Opus or ChatGPT unless the task packet explicitly states mode-specific constraints.
+The executor should not infer whether the orchestrator is Opus or ChatGPT unless the task packet explicitly states mode-specific constraints.
+
+Switching the executor is allowed only at task boundaries and must update `active_executor`.
 
 ## Orchestrator rules
 

@@ -32,7 +32,7 @@ Do not read done/deferred/archive files by default.
 5. Choose the highest-priority unblocked ready task in the active milestone.
 6. If high-risk, ask for explicit approval before delegation.
 7. Write/update `docs/ai/current-context.md` with files read and files intentionally not read.
-8. Create a Codex Task Packet.
+8. Create a Task Packet.
 9. Review Codex execution report and validation evidence.
 10. Accept/request changes/block/revert as appropriate.
 11. Update backlog/task status, execution state, and compact logs.

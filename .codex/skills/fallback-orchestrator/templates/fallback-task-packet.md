@@ -1,4 +1,4 @@
-# Fallback Codex Task Packet
+# Fallback Task Packet
 
 ## Mode
 

@@ -11,7 +11,7 @@ Describe allowed work by orchestrator mode rather than assuming all models have 
 | Product discovery | allowed | limited grooming only | not allowed |
 | Roadmap changes | allowed | user approval required | not allowed |
 | Backlog task selection | allowed | low/medium-risk only | explicit task only |
-| Codex task packet creation | allowed | allowed for ready tasks | not applicable |
+| task packet creation | allowed | allowed for ready tasks | not applicable |
 | High-risk approval | allowed with care | user approval required | not allowed |
 | Architecture decisions | allowed | user approval required | not allowed |
 | Validation review | allowed | low/medium-risk only | not allowed |

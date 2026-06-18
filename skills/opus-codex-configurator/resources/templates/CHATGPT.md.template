@@ -25,8 +25,8 @@ Do not read archives unless necessary.
 ## Allowed in fallback mode
 
 - select low/medium-risk ready tasks;
-- create Codex Task Packets from existing task cards;
-- review Codex reports for low/medium-risk tasks;
+- create Task Packets from existing task cards;
+- review execution reports for low/medium-risk tasks;
 - update task status and compact execution logs after acceptance;
 - ask the user for approval when risk exceeds fallback authority.
 

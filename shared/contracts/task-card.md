@@ -37,4 +37,4 @@ context_refs: []
 
 ## Rule
 
-A ready task must be self-contained enough for Opus to create a Codex Task Packet without reading the whole roadmap.
+A ready task must be self-contained enough for Opus to create a Task Packet without reading the whole roadmap.

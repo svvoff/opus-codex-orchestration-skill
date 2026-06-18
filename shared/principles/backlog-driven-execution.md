@@ -6,8 +6,8 @@ After discovery and configuration, the normal workflow should be:
 User: делай следующую задачу
   -> Opus reads compact state and backlog indexes
   -> Opus selects next ready task
-  -> Opus creates Codex Task Packet
-  -> Codex implements and validates
+  -> Opus creates Task Packet
+  -> the executor implements and validates
   -> Opus reviews evidence
   -> Opus updates docs and task state
 ```
